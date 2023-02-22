@@ -18,19 +18,16 @@ namespace Ordering.API.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly ISMTPEmailService _emailService;
         private readonly IMessageProducer _messageProducer;
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
         public OrdersController(
             IMediator mediator, 
-            ISMTPEmailService emailService,
             IMessageProducer messageProducer,
             IOrderRepository orderRepository,
             IMapper mapper)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            _emailService = emailService;
             _messageProducer = messageProducer;
             _orderRepository = orderRepository;
             _mapper = mapper;

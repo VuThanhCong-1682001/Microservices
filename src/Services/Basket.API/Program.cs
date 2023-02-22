@@ -1,14 +1,22 @@
 using Basket.API.Extensions;
+using Basket.API.Mappings;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Host.AddAppConfigurations();
 Log.Information("Starting Basket API up");
 try
 {
     // Add services to the container.
+    builder.Host.AddAppConfigurations();
+
+    builder.Services.AddConfigurationSettings(builder.Configuration);
+    builder.Services.AddAutoMapper(cfg => cfg.AddProfile(new MappingProfile()));
     builder.Services.ConfigureServices();
     builder.Services.ConfigureRedis(builder.Configuration);
+
+    // Configure Mass Transit
+    builder.Services.ConfigureMassTransit();
+
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
