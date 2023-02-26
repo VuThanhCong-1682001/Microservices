@@ -37,7 +37,7 @@ public interface IRepositoryBaseAsync<T, K> : IRepositoryQueryBase<T, K>
     Task RollbackTransactionAsync();
 }
 
-public interface IRepositoryBaseAsync<T, K, TContext> : IRepositoryBaseAsync<T, K>
+public interface IRepositoryBase<T, K, TContext> : IRepositoryBaseAsync<T, K>
     where T : EntityBase<K>
     where TContext : DbContext
 {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 namespace Infrastructure.Common;
 
 public class RepositoryBase<T, K, TContext> : RepositoryQueryBase<T, K, TContext>,
-    IRepositoryBaseAsync<T, K, TContext>
+    IRepositoryBase<T, K, TContext>
     where T : EntityBase<K>
     where TContext : DbContext
 {
@@ -29,6 +29,8 @@ public class RepositoryBase<T, K, TContext> : RepositoryQueryBase<T, K, TContext
 
     public Task RollbackTransactionAsync() => _dbContext.Database.RollbackTransactionAsync();
 
+    public void Create(T entity) => _dbContext.Set<T>().Add(entity);
+
     public async Task<K> CreateAsync(T entity)
     {
         await _dbContext.Set<T>().AddAsync(entity);
@@ -38,7 +40,16 @@ public class RepositoryBase<T, K, TContext> : RepositoryQueryBase<T, K, TContext
     public async Task<IList<K>> CreateListAsync(IEnumerable<T> entities)
     {
         await _dbContext.Set<T>().AddRangeAsync(entities);
+        await SaveChangesAsync();
         return entities.Select(x => x.Id).ToList();
+    }
+
+    public void Update(T entity)
+    {
+        if (_dbContext.Entry(entity).State == EntityState.Unchanged) return;
+
+        T exist = _dbContext.Set<T>().Find(entity.Id);
+        _dbContext.Entry(exist).CurrentValues.SetValues(entity);
     }
 
     public Task UpdateAsync(T entity)
@@ -53,11 +64,15 @@ public class RepositoryBase<T, K, TContext> : RepositoryQueryBase<T, K, TContext
 
     public Task UpdateListAsync(IEnumerable<T> entities) => _dbContext.Set<T>().AddRangeAsync(entities);
 
+    public void Delete(T entity) => _dbContext.Set<T>().Remove(entity);
+
     public Task DeleteAsync(T entity)
     {
         _dbContext.Set<T>().Remove(entity);
         return Task.CompletedTask;
     }
+
+    public void DeleteList(IEnumerable<T> entities) => _dbContext.Set<T>().RemoveRange(entities);
 
     public Task DeleteListAsync(IEnumerable<T> entities)
     {
@@ -65,5 +80,5 @@ public class RepositoryBase<T, K, TContext> : RepositoryQueryBase<T, K, TContext
         return Task.CompletedTask;
     }
 
-    public Task<int> SaveChangesAsync() => _unitOfWork.CommitAsync();
+    public async Task<int> SaveChangesAsync() => await _unitOfWork.CommitAsync();
 }
