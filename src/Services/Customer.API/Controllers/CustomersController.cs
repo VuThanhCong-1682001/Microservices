@@ -20,20 +20,20 @@ namespace Customer.API.Controllers
         }
         public static void MapPostApi(this WebApplication app)
         {
-            app.MapPost("/api/customers", async (Customer.API.Entities.Customer customer, ICustomerRepository customerRepository) => {
-                await customerRepository.CreateAsync(customer);
-            });
+            //app.MapPost("/api/customers", async (Customer.API.Entities.Customer customer, ICustomerRepository customerRepository) => {
+            //    await customerRepository.CreateAsync(customer);
+            //});
 
-            app.MapDelete("/api/customers/{id}", async (int id, ICustomerRepository customerRepository) =>
-            {
-                var customer = await customerRepository
-                                    .FindByCondition(x => x.Id.Equals(id))
-                                    .FirstOrDefaultAsync();
-                if (customer == null) return Results.NotFound();
-                await customerRepository.DeleteAsync(customer);
+            //app.MapDelete("/api/customers/{id}", async (int id, ICustomerRepository customerRepository) =>
+            //{
+            //    var customer = await customerRepository
+            //                        .FindByCondition(x => x.Id.Equals(id))
+            //                        .FirstOrDefaultAsync();
+            //    if (customer == null) return Results.NotFound();
+            //    await customerRepository.DeleteAsync(customer);
 
-                return Results.NoContent();
-            });
+            //    return Results.NoContent();
+            //});
         }
     }
 }

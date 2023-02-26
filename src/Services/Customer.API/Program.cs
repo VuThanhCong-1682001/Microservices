@@ -25,7 +25,7 @@ try
     builder.Services.AddDbContext<CustomerContext>(m => m.UseNpgsql(connectionString));
 
     builder.Services.AddScoped<ICustomerRepository, CustomerRepository>()
-                    .AddScoped(typeof(IRepositoryBaseAsync<,,>), typeof(IRepositoryBaseAsync<,,>))
+                    .AddScoped(typeof(IRepositoryBase<,,>), typeof(IRepositoryBase<,,>))
                     .AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>))
                     .AddScoped<ICustomerService, CustomerService>();
 
