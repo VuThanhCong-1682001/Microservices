@@ -14,7 +14,10 @@ public class OrderCreatedEvent : BaseEvent
 
     public string FullName { get; set; }
 
-    public OrderCreatedEvent(long id, string userName, decimal totalPrice, string documentNo, string emailAddress, string shippingAddress, string invoiceAddress,
+    public OrderCreatedEvent(
+        long id, string userName, decimal totalPrice, 
+        string documentNo, string emailAddress, 
+        string shippingAddress, string invoiceAddress,
         string fullName)
     {
         Id = id;

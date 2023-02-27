@@ -29,6 +29,7 @@ public class RepositoryBase<T, K, TContext> : RepositoryQueryBase<T, K, TContext
 
     public Task RollbackTransactionAsync() => _dbContext.Database.RollbackTransactionAsync();
 
+    #region CREATE
     public void Create(T entity) => _dbContext.Set<T>().Add(entity);
 
     public async Task<K> CreateAsync(T entity)
@@ -43,7 +44,9 @@ public class RepositoryBase<T, K, TContext> : RepositoryQueryBase<T, K, TContext
         await SaveChangesAsync();
         return entities.Select(x => x.Id).ToList();
     }
+    #endregion
 
+    #region UPDATE
     public void Update(T entity)
     {
         if (_dbContext.Entry(entity).State == EntityState.Unchanged) return;
@@ -63,7 +66,9 @@ public class RepositoryBase<T, K, TContext> : RepositoryQueryBase<T, K, TContext
     }
 
     public Task UpdateListAsync(IEnumerable<T> entities) => _dbContext.Set<T>().AddRangeAsync(entities);
+    #endregion
 
+    #region DELETE
     public void Delete(T entity) => _dbContext.Set<T>().Remove(entity);
 
     public Task DeleteAsync(T entity)
@@ -79,6 +84,7 @@ public class RepositoryBase<T, K, TContext> : RepositoryQueryBase<T, K, TContext
         _dbContext.Set<T>().RemoveRange(entities);
         return Task.CompletedTask;
     }
+    #endregion
 
     public async Task<int> SaveChangesAsync() => await _unitOfWork.CommitAsync();
 }
