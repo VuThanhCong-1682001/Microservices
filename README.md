@@ -1,11 +1,5 @@
-﻿## Tedu AspnetCore Microservices:
+﻿## AspnetCore Microservices:
 A large numerous developers have heard about microservices and how it is the next big thing. In any case, for some developers I have coporate with, microservices is simply one more popular expression like DevOps. I have been dealing with various tasks involving microservices for somewhat more than a year now and here, I might want to discuss the hypothesis and the thoughts behind the idea. I built this course to help developers narrow down your challenges with my reality experiences.
-
-- Microservice Course : [https://tedu.com.vn/khoa-hoc](https://tedu.com.vn/khoa-hoc/xay-dung-he-thong-voi-kien-truc-micro-service-49.html)
-- Microservice Course: [https://tedu.com.vn/khoa-hoc](https://tedu.com.vn/course-ref/49/C5D7O1.html)
-- Facebook Group: [https://www.facebook.com/groups/](https://www.facebook.com/groups/learnmicroservices)
-- Slides: [Slide](https://github.com/rickykiet83/tedu-aspnetcore-microservices-training/blob/feat/customer-api/resources/Xay%20dung%20he%20thong%20voi%20Microservice.pdf)
-- Identity Server: [Identity Server repo](https://github.com/rickykiet83/tedu-microserivces.idp)
 
 ## Prepare environment
 
@@ -75,16 +69,6 @@ Some docker images are not compatible with Apple Chip (M1, M2). You should repla
 - https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-6.0
 - https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/httpclient-message-handlers
 - https://github.com/dotnet-architecture/eShopOnContainers
-
-## Recommended Courses:
-- Xây dựng hệ thống với kiến trúc Micro-service: [https://tedu.com.vn/khoa-hoc](https://tedu.com.vn/course-ref/49/C5D7O1.html)
-- Làm chủ Docker để chinh phục DevOps:  [https://tedu.com.vn/khoa-hoc](https://tedu.com.vn/course-ref/42/C5D7O1.html)
-- Tedu Exam course (MongoDb, DDD, CQRS, Identity Server):  [https://tedu.com.vn/khoa-hoc](https://tedu.com.vn/course-ref/43/C5D7O1.html)
-- Authentication và Authorization nâng cao:  [https://tedu.com.vn/khoa-hoc](https://tedu.com.vn/course-ref/36/C5D7O1.html)
-- Xây dựng ứng dụng web với ASP.NET Core Web API + Identity Server + Angular:  [https://tedu.com.vn/khoa-hoc](https://tedu.com.vn/course-ref/35/C5D7O1.htm)
-- Phát triển Web App với .NET 6 (ABP Framework & Angular):  [https://tedu.com.vn/khoa-hoc](https://tedu.com.vn/course-ref/50/C5D7O1.html)
-- Triển khai CI/CD với Azure DevOps:  [https://tedu.com.vn/khoa-hoc](https://tedu.com.vn/course-ref/37/C5D7O1.html)
-- Thiết kế RESTful API với ASP.NET Core và Dapper ORM: [https://tedu.com.vn/khoa-hoc](https://tedu.com.vn/course-ref/24/C5D7O1.html)
 
 ## Docker Commands: (cd into folder contain file `docker-compose.yml`, `docker-compose.override.yml`)
 
