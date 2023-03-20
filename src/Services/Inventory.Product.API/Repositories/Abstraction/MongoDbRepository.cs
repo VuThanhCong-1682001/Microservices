@@ -1,6 +1,7 @@
 ﻿using Inventory.Product.API.Entities.Abstraction;
 using Inventory.Product.API.Extensions;
 using MongoDB.Driver;
+using Shared.Configurations;
 using System.Linq.Expressions;
 
 namespace Inventory.Product.API.Repositories.Abstraction
@@ -8,7 +9,7 @@ namespace Inventory.Product.API.Repositories.Abstraction
     public class MongoDbRepository<T> : IMongoDbRepositoryBase<T> where T : MongoEntity
     {
         private IMongoDatabase Database { get; }
-        public MongoDbRepository(IMongoClient client, DatabaseSettings settings)
+        public MongoDbRepository(IMongoClient client, MongoDbSettings settings)
         {
             Database = client.GetDatabase(settings.DatabaseName);
         }
