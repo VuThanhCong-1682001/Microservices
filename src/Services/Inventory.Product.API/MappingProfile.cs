@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Inventory.Product.API.Entities;
-using Shared.Dtos.Inventory;
 using Shared.DTOs.Inventory;
 
 namespace Inventory.Product.API
