@@ -20,8 +20,8 @@ namespace Inventory.Product.API.Entities
         [BsonElement("documentType")]
         public EDocumentType DocumentType { get; set; }
 
-        [BsonElement("documentNo")]
-        public string DocumentNo { get; set; }
+        [BsonElement("documentNo")] 
+        public string DocumentNo { get; set; } = Guid.NewGuid().ToString();
 
         [BsonElement("itemNo")]
         public string ItemNo { get; set; }
@@ -30,6 +30,6 @@ namespace Inventory.Product.API.Entities
         public int Quantity { get; set; }
 
         [BsonElement("externalDocumentNo")]
-        public string ExternalDocumentNo { get; set; }
+        public string ExternalDocumentNo { get; set; } = Guid.NewGuid().ToString();
     }
 }
