@@ -1,6 +1,6 @@
 ﻿using Shared.SeedWork;
 
-namespace Shared.Dtos.Inventory
+namespace Shared.DTOs.Inventory
 {
     public class GetInventoryPagingQuery : PagingRequestParameters
     {

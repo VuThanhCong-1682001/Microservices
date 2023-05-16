@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Net;
-using Inventory.Product.API.Extensions;
+using Infrastructure.Common.Models;
 using Inventory.Product.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Dtos.Inventory;
 using Shared.DTOs.Inventory;
 
 namespace Inventory.Product.API.Controllers
