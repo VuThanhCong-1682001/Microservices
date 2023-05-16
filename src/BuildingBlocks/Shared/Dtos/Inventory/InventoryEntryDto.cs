@@ -1,6 +1,6 @@
 ﻿using Shared.Enums.Inventory;
 
-namespace Shared.Dtos.Inventory
+namespace Shared.DTOs.Inventory
 {
     public record InventoryEntryDto
     {
