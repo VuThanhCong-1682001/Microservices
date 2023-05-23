@@ -13,9 +13,10 @@ try
     builder.Services.AddAutoMapper(cfg => cfg.AddProfile(new MappingProfile()));
     builder.Services.ConfigureServices();
     builder.Services.ConfigureRedis(builder.Configuration);
+    builder.Services.ConfigureGrpcServices();
 
     // Configure Mass Transit
-    builder.Services.ConfigureMassTransit();
+    //builder.Services.ConfigureMassTransit();
 
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
