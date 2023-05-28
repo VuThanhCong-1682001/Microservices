@@ -31,7 +31,7 @@ Some docker images are not compatible with Apple Chip (M1, M2). You should repla
 - Webstatus Health Check: http://localhost:6010
 
 ## Docker Application URLs - LOCAL Environment (Docker Container):
-- Portainer: http://localhost:9000 - username: admin ; pass: admin1234
+- Portainer: http://localhost:9000 - username: admin ; pass: Abcd@123@!@#
 - Portainer: http://localhost:9000 - username: admin ; pass: "{your-password}"
 - Kibana: http://localhost:5601 - username: elastic ; pass: admin
 - RabbitMQ: http://localhost:15672 - username: guest ; pass: guest

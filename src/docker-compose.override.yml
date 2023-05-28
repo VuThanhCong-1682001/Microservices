@@ -2,7 +2,7 @@
 
 services:
   #database section
-
+  
   #orderdb: sql server
   orderdb:
     container_name: orderdb
@@ -14,7 +14,7 @@ services:
       - sqlserver_data:/var/lib/sqlserver/data
     ports:
       - "1435:1433"
-
+        
   #productdb: mysql
   productdb:
     container_name: productdb
@@ -25,7 +25,7 @@ services:
       - mysql_data:/var/lib/mysql
     ports:
       - "3306:3306"
-
+  
   #customerdb: postgres
   customerdb:
     container_name: customerdb
@@ -38,48 +38,48 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
+    
   #basketdb: redis
   basketdb:
     container_name: basketdb
     restart: always
     ports:
       - "6379:6379"
-
+  
   #inventorydb: mongo
   inventorydb:
     container_name: inventorydb
     restart: always
     ports:
-      - "27018:27017"
+      - "27017:27017"
     volumes:
       - mongo_data:/data/db
-
+  
   #infrastructure section
+  
   rabbitmq:
     container_name: rabbitmq
     restart: always
     ports:
       - "5672:5672"
       - "15672:15672"
-
+    
   pgadmin:
     container_name: pgadmin
     environment:
-      - PGADMIN_DEFAULT_EMAIL=aspnetcore@microservice.com
+      - PGADMIN_DEFAULT_EMAIL=admin@vtc.com.vn
       - PGADMIN_DEFAULT_PASSWORD=admin1234
     restart: always
     ports:
       - "5050:80"
     volumes:
       - pgadmin_data:/root/.pgadmin
-
-  #dùng để quản lý các container, dùng ui thay vì phải command line
+    
   portainer:
     container_name: portainer
     restart: always
     ports:
-      - "8081:8000"
+      - "8080:8000"
       - "9000:9000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -96,7 +96,7 @@ services:
       - "9200:9200"
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
-
+  
   kibana:
     container_name: kibana
     environment:
@@ -105,16 +105,70 @@ services:
       - elasticsearch
     ports:
       - "5601:5601"
-
-  #microservices api section
+      
+  #microservices api sections
   product.api:
     container_name: product.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - "ConnectionStrings:DefaultConnectionString=Server=productdb;Port=3306;Database=ProductDb;Uid=root;Pwd=Passw0rd!;"
-    depends_on:
+      - "DatabaseSettings:ConnectionString=Server=productdb;Port=3306;Database=ProductDb;Uid=root;Pwd=Passw0rd!"
+    depends_on: 
       - productdb
     ports:
       - "6002:80"
+    restart: always
+    
+  customer.api:
+    container_name: customer.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "DatabaseSettings:ConnectionString=Server=customerdb;Port=5432;Database=CustomerDb;User Id=admin;Password=admin1234"
+    depends_on: 
+      - customerdb
+    ports:
+      - "6003:80"
+    restart: always
+  
+  basket.api:
+    container_name: basket.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "CacheSettings:ConnectionString=basketdb:6379"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+      - "GrpcSettings:StockUrl=http://inventory.grpc"
+    depends_on: 
+      - basketdb
+      - rabbitmq
+    ports:
+      - "6004:80"
+    restart: always
+  
+  ordering.api:
+    container_name: ordering.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "DatabaseSettings:ConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=Passw0rd!;Multipleactiveresultsets=true"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+    depends_on:
+      - orderdb
+      - rabbitmq
+    ports:
+      - "6005:80"
+    restart: always
+    
+  inventory.product.api:
+    container_name: inventory.product.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "MongoDbSettings:ConnectionString=mongodb://inventorydb"
+      - "MongoDbSettings:DatabaseName=InventoryDb"
+    depends_on:
+      - inventorydb
+    ports:
+      - "6006:80"
     restart: always

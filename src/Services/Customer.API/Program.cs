@@ -1,32 +1,35 @@
 using Common.Logging;
-using Contracts.Domains.Interfaces;
+using Customer.API;
 using Customer.API.Controllers;
 using Customer.API.Persistence;
 using Customer.API.Repositories;
 using Customer.API.Repositories.Interfaces;
 using Customer.API.Services;
 using Customer.API.Services.Interfaces;
-using Infrastructure.Common;
+using Infrastructure.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
-builder.Host.UseSerilog(Serilogger.Configure);
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
-Log.Information("Starting Customer API up");
+var builder = WebApplication.CreateBuilder(args);
+
+Log.Information($"Start {builder.Environment.ApplicationName} up");
 try
 {
     // Add services to the container.
+    builder.Host.UseSerilog(Serilogger.Configure);
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+    builder.Services.AddAutoMapper(cfg => cfg.AddProfile(new MappingProfile()));
 
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionString");
     builder.Services.AddDbContext<CustomerContext>(m => m.UseNpgsql(connectionString));
 
     builder.Services.AddScoped<ICustomerRepository, CustomerRepository>()
-                    .AddScoped(typeof(IRepositoryBase<,,>), typeof(IRepositoryBase<,,>))
-                    .AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>))
                     .AddScoped<ICustomerService, CustomerService>();
 
     var app = builder.Build();
@@ -38,10 +41,16 @@ try
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(c =>
+        {
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json",
+                $"{builder.Environment.ApplicationName} v1"));
+        });
     }
 
-    app.UseHttpsRedirection();
+    app.UseMiddleware<ErrorWrappingMiddleware>();
+
+    //app.UseHttpsRedirection();
 
     app.UseAuthorization();
 

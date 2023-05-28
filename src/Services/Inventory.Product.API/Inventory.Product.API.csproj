@@ -16,4 +16,10 @@
 		<ProjectReference Include="..\..\BuildingBlocks\Infrastructure\Infrastructure.csproj" />
 		<ProjectReference Include="..\..\BuildingBlocks\Shared\Shared.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update=".dockerignore">
+	    <DependentUpon>Dockerfile</DependentUpon>
+	  </None>
+	</ItemGroup>
 </Project>

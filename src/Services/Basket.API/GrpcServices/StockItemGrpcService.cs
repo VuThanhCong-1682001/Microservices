@@ -19,7 +19,7 @@ namespace Basket.API.GrpcServices
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex);
                 throw;
             }
         }
