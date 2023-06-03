@@ -1,6 +1,6 @@
 {
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:5000"
+    "BaseUrl": "http://apigw.ocelot"
   },
   "Routes": [
     // Customer api: http://localhost:5003/api/customers
@@ -13,8 +13,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "host.docker.internal",
+          "Port": 6003
         }
       ],
       "SwaggerKey": "customer-service"
@@ -29,8 +29,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "host.docker.internal",
+          "Port": 6002
         }
       ],
       "SwaggerKey": "product-service"
@@ -45,8 +45,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "host.docker.internal",
+          "Port": 6002
         }
       ],
       //      "AuthenticationOptions": {
@@ -68,24 +68,27 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "host.docker.internal",
+          "Port": 6002
         }
       ],
       "RateLimitOptions": {
-        "ClientWhitelist": [], // the client in this array will not be affected by the rate limiting
+        "ClientWhitelist": [],
+        // the client in this array will not be affected by the rate limiting
         "EnableRateLimiting": true,
-        "Period": "10s", // 1s, 5m, 1h, 1d
-        "PeriodTimespan": 10, // retry after a certain number of seconds
-        "Limit": 3 // the maximum number of requests that a client can make in a defined period.
+        "Period": "1s",
+        // 1s, 5m, 1h, 1d
+        "PeriodTimespan": 1,
+        // retry after a certain number of seconds
+        "Limit": 1
+        // the maximum number of requests that a client can make in a defined period.
       },
       "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 2, //If the service does not response for 2 seconds, it will throw a timeout exception
+        "ExceptionsAllowedBeforeBreaking": 2,
+        //If the service does not response for 2 seconds, it will throw a timeout exception
         "DurationOfBreak": 1000,
-        "TimeoutValue": 5000 //If the service throws a second exception, the service will not be accessible for five seconds
-      },
-      "FileCacheOptions": {
-        "TtlSeconds": 15 //cached seconds
+        "TimeoutValue": 5000
+        //If the service throws a second exception, the service will not be accessible for five seconds
       },
       "SwaggerKey": "product-service"
     },
@@ -98,8 +101,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "host.docker.internal",
+          "Port": 6002
         }
       ],
       "SwaggerKey": "product-service"
@@ -115,8 +118,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "host.docker.internal",
+          "Port": 6004
         }
       ],
       "SwaggerKey": "basket-service"
@@ -130,8 +133,23 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "host.docker.internal",
+          "Port": 6004
+        }
+      ],
+      "SwaggerKey": "basket-service"
+    },
+    {
+      "UpstreamPathTemplate": "/baskets/checkout",
+      "UpstreamHttpMethod": [
+        "POST"
+      ],
+      "DownstreamPathTemplate": "/api/baskets/checkout",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 6004
         }
       ],
       "SwaggerKey": "basket-service"
@@ -145,8 +163,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "host.docker.internal",
+          "Port": 6004
         }
       ],
       "SwaggerKey": "basket-service"
@@ -163,8 +181,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5005
+          "Host": "host.docker.internal",
+          "Port": 6005
         }
       ],
       "SwaggerKey": "order-service"
@@ -178,8 +196,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5005
+          "Host": "host.docker.internal",
+          "Port": 6005
         }
       ],
       "SwaggerKey": "order-service"
@@ -194,8 +212,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5006
+          "Host": "host.docker.internal",
+          "Port": 6006
         }
       ],
       "SwaggerKey": "inventory-service"
@@ -209,8 +227,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5006
+          "Host": "host.docker.internal",
+          "Port": 6006
         }
       ],
       "SwaggerKey": "inventory-service"
@@ -225,8 +243,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5006
+          "Host": "host.docker.internal",
+          "Port": 6006
         }
       ],
       "SwaggerKey": "inventory-service"
@@ -240,8 +258,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5006
+          "Host": "host.docker.internal",
+          "Port": 6006
         }
       ],
       "SwaggerKey": "inventory-service"
@@ -254,7 +272,7 @@
         {
           "Name": "Product API",
           "Version": "v1",
-          "Url": "http://localhost:5002/swagger/v1/swagger.json"
+          "Url": "http://product.api/swagger/v1/swagger.json"
         }
       ]
     },
@@ -264,7 +282,7 @@
         {
           "Name": "Customer API",
           "Version": "v1",
-          "Url": "http://localhost:5003/swagger/v1/swagger.json"
+          "Url": "http://customer.api/swagger/v1/swagger.json"
         }
       ]
     },
@@ -274,7 +292,7 @@
         {
           "Name": "Basket API",
           "Version": "v1",
-          "Url": "http://localhost:5004/swagger/v1/swagger.json"
+          "Url": "http://basket.api/swagger/v1/swagger.json"
         }
       ]
     },
@@ -284,7 +302,7 @@
         {
           "Name": "Order API",
           "Version": "v1",
-          "Url": "http://localhost:5005/swagger/v1/swagger.json"
+          "Url": "http://order.api/swagger/v1/swagger.json"
         }
       ]
     },
@@ -294,7 +312,7 @@
         {
           "Name": "Inventory API",
           "Version": "v1",
-          "Url": "http://localhost:5006/swagger/v1/swagger.json"
+          "Url": "http://inventory.product.api/swagger/v1/swagger.json"
         }
       ]
     }

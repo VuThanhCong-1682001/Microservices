@@ -94,7 +94,6 @@ namespace Product.API.Extensions
             return services.AddScoped(typeof(IRepositoryBase<,,>), typeof(RepositoryBase<,,>))
                     .AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>))
                     .AddScoped<IProductRepository, ProductRepository>()
-                    .AddTransient<ITokenService, TokenService>();
                 ;
         }
     }
