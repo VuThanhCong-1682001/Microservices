@@ -1,9 +1,12 @@
-﻿using Contracts.Domains;
-using Contracts.Domains.Interfaces;
+﻿using Contracts.Domains.Interfaces;
+using Contracts.Domains;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infrastructure.Common;
+public class RepositoryBase<T, K> : RepositoryQueryBase<T, K> where T : EntityBase<K>
+{
+}
 
 public class RepositoryBase<T, K, TContext> : RepositoryQueryBase<T, K, TContext>,
     IRepositoryBase<T, K, TContext>
@@ -29,13 +32,19 @@ public class RepositoryBase<T, K, TContext> : RepositoryQueryBase<T, K, TContext
 
     public Task RollbackTransactionAsync() => _dbContext.Database.RollbackTransactionAsync();
 
-    #region CREATE
     public void Create(T entity) => _dbContext.Set<T>().Add(entity);
 
     public async Task<K> CreateAsync(T entity)
     {
         await _dbContext.Set<T>().AddAsync(entity);
+        await SaveChangesAsync();
         return entity.Id;
+    }
+
+    public IList<K> CreateList(IEnumerable<T> entities)
+    {
+        _dbContext.Set<T>().AddRange(entities);
+        return entities.Select(x => x.Id).ToList();
     }
 
     public async Task<IList<K>> CreateListAsync(IEnumerable<T> entities)
@@ -44,9 +53,7 @@ public class RepositoryBase<T, K, TContext> : RepositoryQueryBase<T, K, TContext
         await SaveChangesAsync();
         return entities.Select(x => x.Id).ToList();
     }
-    #endregion
 
-    #region UPDATE
     public void Update(T entity)
     {
         if (_dbContext.Entry(entity).State == EntityState.Unchanged) return;
@@ -55,36 +62,38 @@ public class RepositoryBase<T, K, TContext> : RepositoryQueryBase<T, K, TContext
         _dbContext.Entry(exist).CurrentValues.SetValues(entity);
     }
 
-    public Task UpdateAsync(T entity)
+    public async Task UpdateAsync(T entity)
     {
-        if (_dbContext.Entry(entity).State == EntityState.Unchanged) return Task.CompletedTask;
+        if (_dbContext.Entry(entity).State == EntityState.Unchanged) return;
 
         T exist = _dbContext.Set<T>().Find(entity.Id);
         _dbContext.Entry(exist).CurrentValues.SetValues(entity);
-
-        return Task.CompletedTask;
+        await SaveChangesAsync();
     }
 
-    public Task UpdateListAsync(IEnumerable<T> entities) => _dbContext.Set<T>().AddRangeAsync(entities);
-    #endregion
+    public void UpdateList(IEnumerable<T> entities) => _dbContext.Set<T>().AddRange(entities);
 
-    #region DELETE
+    public async Task UpdateListAsync(IEnumerable<T> entities)
+    {
+        await _dbContext.Set<T>().AddRangeAsync(entities);
+        await SaveChangesAsync();
+    }
+
     public void Delete(T entity) => _dbContext.Set<T>().Remove(entity);
 
-    public Task DeleteAsync(T entity)
+    public async Task DeleteAsync(T entity)
     {
         _dbContext.Set<T>().Remove(entity);
-        return Task.CompletedTask;
+        await SaveChangesAsync();
     }
 
     public void DeleteList(IEnumerable<T> entities) => _dbContext.Set<T>().RemoveRange(entities);
 
-    public Task DeleteListAsync(IEnumerable<T> entities)
+    public async Task DeleteListAsync(IEnumerable<T> entities)
     {
         _dbContext.Set<T>().RemoveRange(entities);
-        return Task.CompletedTask;
+        await SaveChangesAsync();
     }
-    #endregion
 
     public async Task<int> SaveChangesAsync() => await _unitOfWork.CommitAsync();
 }

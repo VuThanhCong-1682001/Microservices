@@ -3,22 +3,23 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Dtos.Identity;
 
-namespace Product.API.Controllers;
+namespace OcelotApiGw.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TokenController : ControllerBase
+public class TokensController : ControllerBase
 {
     private readonly ITokenService _tokenService;
 
-    public TokenController(ITokenService tokenService)
+    public TokensController(ITokenService tokenService)
     {
         _tokenService = tokenService;
     }
 
     [HttpGet]
     [AllowAnonymous]
-    public IActionResult GetToken() {
+    public IActionResult GetToken()
+    {
         var result = _tokenService.GetToken(new TokenRequest());
         return Ok(result);
     }

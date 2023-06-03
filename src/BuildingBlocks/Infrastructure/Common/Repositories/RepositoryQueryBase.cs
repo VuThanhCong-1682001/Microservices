@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using Contracts.Common.Interfaces;
 using Contracts.Domains;
 using Contracts.Domains.Interfaces;
 using Microsoft.EntityFrameworkCore;
