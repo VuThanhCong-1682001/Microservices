@@ -39,9 +39,26 @@ try
 
     app.UseMiddleware<ErrorWrappingMiddleware>();
 
+    //app.UseAuthentication();
+
+    app.UseRouting();
+
     //app.UseHttpsRedirection();
 
-    app.UseAuthorization();
+    //app.UseAuthorization();
+
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapGet("/", context =>
+        {
+            //await context.Response.WriteAsync($"Hello members! This is {builder.Environment.ApplicationName}");
+            context.Response.Redirect("swagger/index.html");
+            return Task.CompletedTask;
+        });
+    });
+
+    app.UseSwaggerForOcelotUI(
+        opt => { opt.PathToSwaggerGenerator = "/swagger/docs"; });
 
     app.MapControllers();
 
