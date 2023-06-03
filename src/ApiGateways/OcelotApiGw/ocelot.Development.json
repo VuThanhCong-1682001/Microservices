@@ -36,12 +36,12 @@
       "SwaggerKey": "product-service"
     },
     {
-      "UpstreamPathTemplate": "/products/{id}",
+      "UpstreamPathTemplate": "/products/{any}",
       "UpstreamHttpMethod": [
         "PUT",
         "DELETE"
       ],
-      "DownstreamPathTemplate": "/api/products/{id}",
+      "DownstreamPathTemplate": "/api/products/{any}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -49,13 +49,13 @@
           "Port": 5002
         }
       ],
-      //      "AuthenticationOptions": {
-      //        "AuthenticationProviderKey": "Bearer",
-      //        "AllowedScopes": []
-      //      },
-      //      "RouteClaimsRequirement": {
-      //        "Role": "Admin"
-      //      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      },
       "SwaggerKey": "product-service"
     },
     {
