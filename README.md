@@ -36,7 +36,7 @@ Some docker images are not compatible with Apple Chip (M1, M2). You should repla
 - Kibana: http://localhost:5601 - username: elastic ; pass: admin
 - RabbitMQ: http://localhost:15672 - username: guest ; pass: guest
 
-@@ -46,10 +57,16 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d --remo
+@@ -46,10 +57,16 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d --remove-orphans --build
 - Run Compound to start multi projects
 ---
 ## Application URLs - DEVELOPMENT Environment:
