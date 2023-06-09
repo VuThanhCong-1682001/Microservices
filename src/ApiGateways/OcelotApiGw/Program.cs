@@ -1,4 +1,3 @@
-using Common.Logging;
 using Infrastructure.Middlewares;
 using Ocelot.Middleware;
 using OcelotApiGw.Extensions;
