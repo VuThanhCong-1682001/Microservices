@@ -15,7 +15,7 @@ dotnet tool install --global dotnet-ef
 ## Warning:
 
 Some docker images are not compatible with Apple Chip (M1, M2). You should replace them with appropriate images. Suggestion images below:
-@@ -31,13 +36,19 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d --remo
+@@ -31,13 +36,19 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d --remove-orphans --build
 ```
 
 ## Application URLs - LOCAL Environment (Docker Container):
@@ -36,7 +36,7 @@ Some docker images are not compatible with Apple Chip (M1, M2). You should repla
 - Kibana: http://localhost:5601 - username: elastic ; pass: admin
 - RabbitMQ: http://localhost:15672 - username: guest ; pass: guest
 
-@@ -46,10 +57,16 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d --remove-orphans --build
+@@ -46,10 +57,16 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d --remove-orphans --buildve-orphans --build
 - Run Compound to start multi projects
 ---
 ## Application URLs - DEVELOPMENT Environment:
@@ -53,7 +53,7 @@ Some docker images are not compatible with Apple Chip (M1, M2). You should repla
 ---
 ## Application URLs - PRODUCTION Environment:
 
-@@ -60,8 +77,28 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d --remo
+@@ -60,8 +77,28 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d --remove-orphans --build
 
 - https://dotnet.microsoft.com/download/dotnet/6.0
 - https://visualstudio.microsoft.com/
