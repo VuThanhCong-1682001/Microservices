@@ -1,4 +1,7 @@
-﻿namespace Hangfire.API.Extensions;
+﻿using Contracts.ScheduledJobs;
+using Infrastructure.ScheduledJobs;
+
+namespace Hangfire.API.Extensions;
 
 public static class ServiceExtensions
 {
@@ -11,4 +14,7 @@ public static class ServiceExtensions
 
         return services;
     }
+
+    public static IServiceCollection ConfigureServices(this IServiceCollection services)
+        => services.AddTransient<IScheduledJobService, HangfireService>();
 }
