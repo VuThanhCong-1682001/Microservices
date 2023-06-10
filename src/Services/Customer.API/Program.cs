@@ -1,12 +1,14 @@
 using Common.Logging;
 using Customer.API;
 using Customer.API.Controllers;
+using Customer.API.Extensions;
 using Customer.API.Persistence;
 using Customer.API.Repositories;
 using Customer.API.Repositories.Interfaces;
 using Customer.API.Services;
 using Customer.API.Services.Interfaces;
 using Infrastructure.Middlewares;
+using Infrastructure.ScheduledJobs;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -19,18 +21,17 @@ var builder = WebApplication.CreateBuilder(args);
 Log.Information($"Start {builder.Environment.ApplicationName} up");
 try
 {
+    builder.Host.AddAppConfigurations();
     // Add services to the container.
-    builder.Host.UseSerilog(Serilogger.Configure);
+    builder.Services.AddConfigurationSettings(builder.Configuration);
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     builder.Services.AddAutoMapper(cfg => cfg.AddProfile(new MappingProfile()));
 
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionString");
-    builder.Services.AddDbContext<CustomerContext>(m => m.UseNpgsql(connectionString));
-
-    builder.Services.AddScoped<ICustomerRepository, CustomerRepository>()
-                    .AddScoped<ICustomerService, CustomerService>();
+    builder.Services.ConfigureCustomerContext();
+    builder.Services.AddInfrastructureServices();
+    builder.Services.AddHangfireService();
 
     var app = builder.Build();
 
@@ -53,6 +54,8 @@ try
     //app.UseHttpsRedirection();
 
     app.UseAuthorization();
+
+    app.UseHangfireDashboard(builder.Configuration);
 
     app.MapControllers();
 
