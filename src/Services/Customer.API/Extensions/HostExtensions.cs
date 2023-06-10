@@ -1,18 +1,20 @@
 ﻿using Common.Logging;
-using Microsoft.AspNetCore.Mvc.Filters;
+using Hangfire;
 using Serilog;
+using Shared.Configurations;
 
-namespace Hangfire.API.Extensions;
+namespace Customer.API.Extensions;
 
 public static class HostExtensions
 {
-    public static void AddAppConfigurations(this ConfigureHostBuilder host)
+    internal static void AddAppConfigurations(this ConfigureHostBuilder host)
     {
         host.ConfigureAppConfiguration((context, config) =>
         {
             var env = context.HostingEnvironment;
             config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true,
+                    reloadOnChange: true)
                 .AddEnvironmentVariables();
         }).UseSerilog(Serilogger.Configure);
     }
@@ -20,12 +22,12 @@ public static class HostExtensions
     internal static IApplicationBuilder UseHangfireDashboard(this IApplicationBuilder app, IConfiguration configuration)
     {
         var configDashboard = configuration.GetSection("HangFireSettings:Dashboard").Get<DashboardOptions>();
-        var hangfireSettings = configuration.GetSection("HangFireSettings").Get<HangFireSettings>();
-        var hangfireRoute = hangfireSettings.Route;
+        var hangFireSettings = configuration.GetSection("HangFireSettings").Get<HangFireSettings>();
+        var hangFireRoute = hangFireSettings.Route;
 
-        app.UseHangfireDashboard(hangfireRoute, new DashboardOptions
+        app.UseHangfireDashboard(hangFireRoute, new DashboardOptions
         {
-            //Authorization = new[] { new AuthorizationFilter() },
+            // Authorization = new[] {new HangfireAuthorizationFilter()},
             DashboardTitle = configDashboard.DashboardTitle,
             StatsPollingInterval = configDashboard.StatsPollingInterval,
             AppPath = configDashboard.AppPath,
