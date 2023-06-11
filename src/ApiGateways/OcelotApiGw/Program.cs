@@ -3,7 +3,7 @@ using Ocelot.Middleware;
 using OcelotApiGw.Extensions;
 using Serilog;
 
-Log.Information("Starting Basket API up");
+Log.Information("Starting Ocelot Gateway up");
 Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()
                 .CreateBootstrapLogger();

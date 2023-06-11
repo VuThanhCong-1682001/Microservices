@@ -2,6 +2,7 @@
 using Basket.API.Entities;
 using Basket.API.GrpcServices;
 using Basket.API.Repositories.Interfaces;
+using Basket.API.Services.Interfaces;
 using EventBus.Messages.IntegrationEvents.Events;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
@@ -16,19 +17,23 @@ namespace Basket.API.Controllers
     public class BasketsController : ControllerBase
     {
         private readonly IBasketRepository _basketRepository;
-        private readonly IPublishEndpoint _publishEndpoint;
+        //private readonly IPublishEndpoint _publishEndpoint;
         private readonly IMapper _mapper;
         private readonly StockItemGrpcService _stockItemGrpcService;
+        private readonly IEmailTemplateService _emailTemplateService;
+
         public BasketsController(
             IBasketRepository basketRepository,
-            IPublishEndpoint publishEndpoint,
+            //IPublishEndpoint publishEndpoint,
             IMapper mapper,
-            StockItemGrpcService stockItemGrpcService)
+            StockItemGrpcService stockItemGrpcService,
+            IEmailTemplateService emailTemplateService)
         {
             _basketRepository = basketRepository;
-            _publishEndpoint = publishEndpoint;
+            //_publishEndpoint = publishEndpoint;
             _mapper = mapper;
             _stockItemGrpcService = stockItemGrpcService;
+            _emailTemplateService = emailTemplateService;
         }
 
         [HttpGet("{username}", Name = "GetBasket")]
@@ -49,9 +54,7 @@ namespace Basket.API.Controllers
                 var stock = await _stockItemGrpcService.GetStock(item.ItemNo);
                 item.SetAvailableQuantity(stock.Quantity);
             }
-            {
 
-            }
             var options = new DistributedCacheEntryOptions()
                                 .SetAbsoluteExpiration(DateTime.UtcNow.AddHours(1))
                                 .SetSlidingExpiration(TimeSpan.FromMinutes(5));
@@ -81,12 +84,25 @@ namespace Basket.API.Controllers
             var eventMessage = _mapper.Map<BasketCheckoutEvent>(basketCheckout);
             eventMessage.TotalPrice = basket.TotalPrice;
 
-            await _publishEndpoint.Publish(eventMessage);
+            //await _publishEndpoint.Publish(eventMessage);
 
             // remove the basket
             await _basketRepository.DeleteBasketFromUsername(basketCheckout.UserName);
 
             return Accepted();
+        }
+
+        [HttpPost("[action]", Name = "SendEmailReminder")]
+        public ContentResult SendEmailReminder()
+        {
+            var emailTemplate = _emailTemplateService.GenerateReminderCheckoutOrderEmail("Tester");
+            var result = new ContentResult
+            {
+                Content = emailTemplate,
+                ContentType = "text/html" 
+            };
+
+            return result;
         }
     }
 }
