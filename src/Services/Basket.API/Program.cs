@@ -6,7 +6,7 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateBootstrapLogger();
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args)`;
 
 Log.Information($"Start {builder.Environment.ApplicationName} up");
 
@@ -18,6 +18,7 @@ try
     builder.Services.AddConfigurationSettings(builder.Configuration);
     builder.Services.AddAutoMapper(cfg => cfg.AddProfile(new MappingProfile()));
     builder.Services.ConfigureServices();
+    builder.Services.ConfigureHttpClientServices();
     builder.Services.ConfigureRedis(builder.Configuration);
     builder.Services.ConfigureGrpcServices();
 
