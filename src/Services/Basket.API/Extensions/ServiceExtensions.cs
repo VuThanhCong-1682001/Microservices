@@ -24,6 +24,8 @@ namespace Basket.API.Extensions
             services.AddSingleton(cacheSettings);
             var grpcSettings = configuration.GetSection(nameof(GrpcSettings)).Get<GrpcSettings>();
             services.AddSingleton(grpcSettings);
+            var backgroundJobSettings = configuration.GetSection(nameof(BackgroundJobSettings)).Get<BackgroundJobSettings>();
+            services.AddSingleton(backgroundJobSettings);
 
             return services;
         }
@@ -32,6 +34,9 @@ namespace Basket.API.Extensions
             services.AddScoped<IBasketRepository, BasketRepository>()
                     .AddTransient<ISerializeService, SerializeService>()
                     .AddTransient<IEmailTemplateService, BasketEmailTemplateService>();
+
+        public static void ConfigureHttpClientServices(this IServiceCollection services) =>
+            services.AddHttpClient<BackgroundJobHttpService>();
 
         public static void ConfigureRedis(this IServiceCollection services, IConfiguration configuration)
         {

@@ -1,10 +1,16 @@
-﻿using Basket.API.Services.Interfaces;
+﻿using Shared.Configurations;
 using System.Text;
 
 namespace Basket.API.Services
 {
     public class EmailTemplateService
     {
+        protected readonly BackgroundJobSettings _backgroundJobSettings;
+        public EmailTemplateService(BackgroundJobSettings backgroundJobSettings)
+        {
+            _backgroundJobSettings = backgroundJobSettings;
+        }
+
         private static readonly string _baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
         private static readonly string _tmplFolder = Path.Combine(_baseDirectory, "EmailTemplates");
 
