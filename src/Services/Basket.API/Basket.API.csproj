@@ -26,4 +26,10 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Protobuf>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="EmailTemplates\reminder-checkout-order.html">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 </Project>
