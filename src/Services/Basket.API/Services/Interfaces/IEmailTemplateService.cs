@@ -2,5 +2,5 @@
 
 public interface IEmailTemplateService
 {
-    string GenerateReminderCheckoutOrderEmail(string username);
+    string GenerateReminderCheckoutOrderEmail(string username, string checkoutUrl = "baskets/checkout");
 }
