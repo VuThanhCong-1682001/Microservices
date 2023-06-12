@@ -3,13 +3,14 @@ using Contracts.Messages;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Ordering.Application.Common.Interfaces;
-using Ordering.Application.Common.Models;
 using Ordering.Application.Features.V1.Orders;
 using Ordering.Application.Features.V1.Orders.Commands.DeleteOrder;
 using Ordering.Application.Features.V1.Orders.Queries.GetOrdersByUserName;
+using Shared.DTOs.Order;
 using Shared.SeedWork;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using OrderDto = Ordering.Application.Common.Models.OrderDto;
 
 namespace Ordering.API.Controllers
 {
@@ -36,6 +37,7 @@ namespace Ordering.API.Controllers
         private static class RouteNames
         {
             public const string GetOrders = nameof(GetOrders);
+            public const string GetOrder = nameof(GetOrder);
             public const string CreateOrder = nameof(CreateOrder);
             public const string UpdateOrder = nameof(UpdateOrder);
             public const string DeleteOrder = nameof(DeleteOrder);
@@ -45,17 +47,27 @@ namespace Ordering.API.Controllers
 
         [HttpGet("{username}", Name = RouteNames.GetOrders)]
         [ProducesResponseType(typeof(IEnumerable<OrderDto>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrdersByUserName([Required] string username)
+        public async Task<ActionResult<IEnumerable<Shared.DTOs.Order.OrderDto>>> GetOrdersByUserName([Required] string username)
         {
             var query = new GetOrdersByUserNameQuery(username);
             var result = await _mediator.Send(query);
             return Ok(result);
         }
 
+        [HttpGet("{id:long}", Name = RouteNames.GetOrder)]
+        [ProducesResponseType(typeof(OrderDto), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<OrderDto>> GetOrder([Required] long id)
+        {
+            var query = new GetOrderByIdQuery(id);
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
         [HttpPost(Name = RouteNames.CreateOrder)]
         [ProducesResponseType(typeof(ApiResult<long>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<ApiResult<long>>> CreateOrder([FromBody] CreateOrderCommand command)
+        public async Task<ActionResult<ApiResult<long>>> CreateOrder([FromBody] CreateOrderDto model)
         {
+            var command = _mapper.Map<CreateOrderCommand>(model);
             var result = await _mediator.Send(command);
             return Ok(result);
         }

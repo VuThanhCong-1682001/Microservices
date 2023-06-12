@@ -12,72 +12,71 @@ using MassTransit;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Shared.Configurations;
 
-namespace Basket.API.Extensions
+namespace Basket.API.Extensions;
+
+public static class ServiceExtensions
 {
-    public static class ServiceExtensions
+    public static IServiceCollection AddConfigurationSettings(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddConfigurationSettings(this IServiceCollection services, IConfiguration configuration)
-        {
-            var eventBusSettings = configuration.GetSection(nameof(EventBusSettings)).Get<EventBusSettings>();
-            services.AddSingleton(eventBusSettings);
-            var cacheSettings = configuration.GetSection(nameof(CacheSettings)).Get<CacheSettings>();
-            services.AddSingleton(cacheSettings);
-            var grpcSettings = configuration.GetSection(nameof(GrpcSettings)).Get<GrpcSettings>();
-            services.AddSingleton(grpcSettings);
-            var backgroundJobSettings = configuration.GetSection(nameof(BackgroundJobSettings)).Get<BackgroundJobSettings>();
-            services.AddSingleton(backgroundJobSettings);
+        var eventBusSettings = configuration.GetSection(nameof(EventBusSettings)).Get<EventBusSettings>();
+        services.AddSingleton(eventBusSettings);
+        var cacheSettings = configuration.GetSection(nameof(CacheSettings)).Get<CacheSettings>();
+        services.AddSingleton(cacheSettings);
+        var grpcSettings = configuration.GetSection(nameof(GrpcSettings)).Get<GrpcSettings>();
+        services.AddSingleton(grpcSettings);
+        var backgroundJobSettings = configuration.GetSection(nameof(BackgroundJobSettings)).Get<BackgroundJobSettings>();
+        services.AddSingleton(backgroundJobSettings);
 
-            return services;
+        return services;
+    }
+
+    public static IServiceCollection ConfigureServices(this IServiceCollection services) =>
+        services.AddScoped<IBasketRepository, BasketRepository>()
+                .AddTransient<ISerializeService, SerializeService>()
+                .AddTransient<IEmailTemplateService, BasketEmailTemplateService>();
+
+    public static void ConfigureHttpClientServices(this IServiceCollection services) =>
+        services.AddHttpClient<BackgroundJobHttpService>();
+
+    public static void ConfigureRedis(this IServiceCollection services, IConfiguration configuration)
+    {
+        var settings = services.GetOptions<CacheSettings>("CacheSettings");
+        if (string.IsNullOrEmpty(settings.ConnectionString))
+        {
+            throw new ArgumentNullException("Redis Connection string is not configured");
         }
-
-        public static IServiceCollection ConfigureServices(this IServiceCollection services) =>
-            services.AddScoped<IBasketRepository, BasketRepository>()
-                    .AddTransient<ISerializeService, SerializeService>()
-                    .AddTransient<IEmailTemplateService, BasketEmailTemplateService>();
-
-        public static void ConfigureHttpClientServices(this IServiceCollection services) =>
-            services.AddHttpClient<BackgroundJobHttpService>();
-
-        public static void ConfigureRedis(this IServiceCollection services, IConfiguration configuration)
+        // Redis Configuration
+        services.AddStackExchangeRedisCache(options =>
         {
-            var settings = services.GetOptions<CacheSettings>("CacheSettings");
-            if (string.IsNullOrEmpty(settings.ConnectionString))
+            options.Configuration = settings.ConnectionString;
+        });
+    }
+
+    public static void ConfigureMassTransit(this IServiceCollection services)
+    {
+        var settings = services.GetOptions<EventBusSettings>("EventBusSettings");
+        if (settings == null || string.IsNullOrEmpty(settings.HostAddress))
+            throw new ArgumentNullException("EventBusSettings is not configured.");
+
+        var mqConnection = new Uri(settings.HostAddress);
+
+        services.TryAddSingleton(KebabCaseEndpointNameFormatter.Instance); // help convert example: "BasketCheckoutEvent" => "basket-checkout-event"
+        services.AddMassTransit(config =>
+        {
+            config.UsingRabbitMq((ctx, cfg) =>
             {
-                throw new ArgumentNullException("Redis Connection string is not configured");
-            }
-            // Redis Configuration
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = settings.ConnectionString;
+                cfg.Host(mqConnection);
             });
-        }
+            // Publish submit order message
+            config.AddRequestClient<IBasketCheckoutEvent>();
+        });
+    }
 
-        public static void ConfigureMassTransit(this IServiceCollection services)
-        {
-            var settings = services.GetOptions<EventBusSettings>("EventBusSettings");
-            if (settings == null || string.IsNullOrEmpty(settings.HostAddress))
-                throw new ArgumentNullException("EventBusSettings is not configured.");
-
-            var mqConnection = new Uri(settings.HostAddress);
-
-            services.TryAddSingleton(KebabCaseEndpointNameFormatter.Instance); // help convert example: "BasketCheckoutEvent" => "basket-checkout-event"
-            services.AddMassTransit(config =>
-            {
-                config.UsingRabbitMq((ctx, cfg) =>
-                {
-                    cfg.Host(mqConnection);
-                });
-                // Publish submit order message
-                config.AddRequestClient<IBasketCheckoutEvent>();
-            });
-        }
-
-        public static IServiceCollection ConfigureGrpcServices(this IServiceCollection services)
-        {
-            var settings = services.GetOptions<GrpcSettings>(nameof(GrpcSettings));
-            services.AddGrpcClient<StockProtoService.StockProtoServiceClient>(x => x.Address = new Uri(settings.StockUrl));
-            services.AddScoped<StockItemGrpcService>();
-            return services;
-        }
+    public static IServiceCollection ConfigureGrpcServices(this IServiceCollection services)
+    {
+        var settings = services.GetOptions<GrpcSettings>(nameof(GrpcSettings));
+        services.AddGrpcClient<StockProtoService.StockProtoServiceClient>(x => x.Address = new Uri(settings.StockUrl));
+        services.AddScoped<StockItemGrpcService>();
+        return services;
     }
 }
