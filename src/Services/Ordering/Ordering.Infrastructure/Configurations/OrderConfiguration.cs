@@ -1,17 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ordering.Domain.Entities;
-using Ordering.Domain.Enums;
+using Shared.Enums.Order;
 
-namespace Ordering.Infrastructure.Configurations
+namespace Ordering.Infrastructure.Configurations;
+
+public class OrderConfiguration : IEntityTypeConfiguration<Order>
 {
-    public class OrderConfiguration : IEntityTypeConfiguration<Order>
+    public void Configure(EntityTypeBuilder<Order> builder)
     {
-        public void Configure(EntityTypeBuilder<Order> builder)
-        {
-            builder.Property(x => x.Status)
-                .HasDefaultValue(EOrderStatus.New)
-                .IsRequired();
-        }
+        builder.Property(x => x.Status)
+            .HasDefaultValue(EOrderStatus.New)
+            .IsRequired();
     }
 }

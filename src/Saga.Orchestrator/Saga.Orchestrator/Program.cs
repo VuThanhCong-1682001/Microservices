@@ -1,5 +1,4 @@
-using Basket.API.Extensions;
-using Basket.API.Mappings;
+using Saga.Orchestrator.Extensions;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -9,28 +8,13 @@ Log.Logger = new LoggerConfiguration()
 var builder = WebApplication.CreateBuilder(args);
 
 Log.Information($"Start {builder.Environment.ApplicationName} up");
-
 try
 {
-    // Add services to the container.
     builder.Host.AddAppConfigurations();
 
-    builder.Services.AddConfigurationSettings(builder.Configuration);
-    builder.Services.AddAutoMapper(cfg => cfg.AddProfile(new MappingProfile()));
-    builder.Services.ConfigureServices();
-    builder.Services.ConfigureHttpClientServices();
-    builder.Services.ConfigureRedis(builder.Configuration);
-    builder.Services.ConfigureGrpcServices();
-
-    // Configure Mass Transit
-    //builder.Services.ConfigureMassTransit();
-
     builder.Services.AddControllers();
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
 
     var app = builder.Build();
-
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
@@ -38,8 +22,6 @@ try
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json",
             $"{builder.Environment.ApplicationName} v1"));
     }
-
-    //app.UseHttpsRedirection();
 
     app.UseAuthorization();
 

@@ -72,6 +72,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventBus", "EventBus", "{78
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBus.Messages", "src\BuildingBlocks\EventBus\EventBus.Messages\EventBus.Messages.csproj", "{3301F6C0-217F-4E12-B4BE-F624ECF5FA23}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Saga.Orchestrator", "Saga.Orchestrator", "{E4C77C4D-1B43-4E53-B35B-3DFFE0BFE53F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Saga.Orchestrator", "src\Saga.Orchestrator\Saga.Orchestrator\Saga.Orchestrator.csproj", "{5C236AFA-1C12-4657-BA1B-15BFEBADE817}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -216,6 +220,14 @@ Global
 		{3301F6C0-217F-4E12-B4BE-F624ECF5FA23}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3301F6C0-217F-4E12-B4BE-F624ECF5FA23}.Release|x64.ActiveCfg = Release|Any CPU
 		{3301F6C0-217F-4E12-B4BE-F624ECF5FA23}.Release|x64.Build.0 = Release|Any CPU
+		{5C236AFA-1C12-4657-BA1B-15BFEBADE817}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C236AFA-1C12-4657-BA1B-15BFEBADE817}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C236AFA-1C12-4657-BA1B-15BFEBADE817}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5C236AFA-1C12-4657-BA1B-15BFEBADE817}.Debug|x64.Build.0 = Debug|Any CPU
+		{5C236AFA-1C12-4657-BA1B-15BFEBADE817}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C236AFA-1C12-4657-BA1B-15BFEBADE817}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C236AFA-1C12-4657-BA1B-15BFEBADE817}.Release|x64.ActiveCfg = Release|Any CPU
+		{5C236AFA-1C12-4657-BA1B-15BFEBADE817}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -249,6 +261,8 @@ Global
 		{30C8A2E5-180A-4E83-8580-8D230D77FAC1} = {84908686-E2E5-40B4-8DFC-B352E5AA66B7}
 		{7832230E-A7B3-410A-A734-F8C3CBDB22B9} = {38B8B942-1AB8-42DD-945B-C76BF7A8B283}
 		{3301F6C0-217F-4E12-B4BE-F624ECF5FA23} = {7832230E-A7B3-410A-A734-F8C3CBDB22B9}
+		{E4C77C4D-1B43-4E53-B35B-3DFFE0BFE53F} = {5B01915A-BA89-494F-A042-B81438DEA43A}
+		{5C236AFA-1C12-4657-BA1B-15BFEBADE817} = {E4C77C4D-1B43-4E53-B35B-3DFFE0BFE53F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8121A8D6-A649-4536-BE0A-E67A25CCBDCB}

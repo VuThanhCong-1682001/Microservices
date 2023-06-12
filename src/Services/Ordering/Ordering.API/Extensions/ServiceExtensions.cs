@@ -1,5 +1,6 @@
 ﻿using Contracts.Common.Interfaces;
 using Contracts.Messages;
+using Contracts.Services;
 using Infrastructure.Common;
 using Infrastructure.Configurations;
 using Infrastructure.Extensions;
