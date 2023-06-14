@@ -41,6 +41,7 @@ namespace Ordering.API.Controllers
             public const string CreateOrder = nameof(CreateOrder);
             public const string UpdateOrder = nameof(UpdateOrder);
             public const string DeleteOrder = nameof(DeleteOrder);
+            public const string DeleteOrderByDocumentNo = nameof(DeleteOrderByDocumentNo);
         }
 
         #region CRUD
@@ -90,19 +91,15 @@ namespace Ordering.API.Controllers
             return NoContent();
         }
 
-        #endregion
+        [HttpDelete("document-no/{documentNo}", Name = RouteNames.DeleteOrderByDocumentNo)]
+        [ProducesResponseType(typeof(ApiResult<bool>), (int)HttpStatusCode.NoContent)]
+        public async Task<ApiResult<bool>> DeleteOrderByDocumentNo([Required] string documentNo)
+        {
+            var command = new DeleteOrderByDocumentNoCommand(documentNo);
+            var result = await _mediator.Send(command);
+            return result;
+        }
 
-        //[HttpGet("send-mail")]
-        //public async Task<IActionResult> SendMail()
-        //{
-        //    var message = new MailRequest
-        //    {
-        //        Body = "<h1>Hello</h1>",
-        //        Subject = "ASPNETCORE",
-        //        ToAddress = "thanhcong1682001@gmail.com"
-        //    };
-        //    await _emailService.SendEmailAsync(message);
-        //    return Ok();
-        //}
+        #endregion
     }
 }

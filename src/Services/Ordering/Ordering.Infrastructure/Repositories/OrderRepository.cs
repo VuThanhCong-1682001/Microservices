@@ -20,6 +20,9 @@ namespace Ordering.Infrastructure.Repositories
         public async Task<IEnumerable<Order>> GetOrdersByUserNameAsync(string userName) =>
             await FindByCondition(x => x.UserName.Equals(userName)).ToListAsync();
 
+        public Task<Order> GetOrderByDocumentNo(string documentNo)
+            => FindByCondition(x => x.DocumentNo.ToString().Equals(documentNo)).FirstOrDefaultAsync();
+
         public async Task<Order> UpdateOrderAsync(Order order)
         {
             await UpdateAsync(order);
