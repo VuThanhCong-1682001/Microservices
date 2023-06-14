@@ -7,6 +7,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Features\V1\Orders\EventHandlers\**" />
+	  <EmbeddedResource Remove="Features\V1\Orders\EventHandlers\**" />
+	  <None Remove="Features\V1\Orders\EventHandlers\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="11.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 		<PackageReference Include="FluentValidation" Version="11.0.3" />
@@ -24,7 +30,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Features\V1\Orders\EventHandlers\" />
 		<Folder Include="Features\V2\Orders\Commands\" />
 		<Folder Include="Features\V2\Orders\EventHandlers\" />
 		<Folder Include="Features\V2\Orders\Queries\" />
